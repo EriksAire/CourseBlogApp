@@ -1,0 +1,29 @@
+﻿@using CourseBlogApp.ViewModels
+@model ViewModel
+
+<h1>Top Posts</h1>
+
+<table class="table">
+    <tbody>
+        @foreach (var item in Model.Posts)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PostBody)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PublishTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfLike)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfDislikes)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

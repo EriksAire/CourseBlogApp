@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@using CourseBlogApp.ViewModels 
+@model ViewModel
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by Title:<input type="text" name="searchstring"/>
+            <button class="btn btn-dark" type="submit">Find</button>
+            <a asp-action="Index">Back to full list</a>
+        </p>
+    </div>
+</form>
+
+<div>
+    <table class="table">
+        @foreach (var post in Model.Posts)
+        {
+            <tr>
+                <td>@post.Title</td>
+                <td>@post.PostBody</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@post.ID">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@post.ID">Delete</a>
+                </td>
+                <td>
+                    @post.NumberOfLike
+                </td>
+                <td>
+                    @post.NumberOfDislikes
+                </td>
+                <td>
+                    <a asp-action="ButtonClick" asp-route-id="@post.ID" asp-route-like="@true">+</a>
+                    <a asp-action="ButtonClick" asp-route-id="@post.ID" asp-route-like="@false">-</a>
+                </td>
+                <td>
+                    @foreach (var comment in Model.Comments)
+                    {
+                        @if (comment.PostID==post.ID)
+                        {
+                            <div>
+                                @comment.Name @comment.CommentBody 
+                                <a asp-action="ReportComment" asp-route-commentid="@comment.ID">Report comment</a><br>
+                            </div>
+                        }
+                    }
+                    <div>
+                        <form asp-controller="Home" asp-action="CreateComment" asp-route-PostID="@post.ID" method="post">
+                            <input type="text" class="form-control" placeholder="Comment Body" name="commentbody" />
+                            <button class="btn btn-dark" type="submit">Create</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        }
+    </table>
+
+    <div>
+        <form asp-controller="Home" asp-action="CreatePost" method="post">
+            <input type="text" class="form-control" placeholder="Title" name="title" />
+            <input type="text" class="form-control" placeholder="Post Body" name="postbody" />
+            <button class="btn btn-dark" type="submit">Create</button>
+        </form>
+
+    </div>
+</div>

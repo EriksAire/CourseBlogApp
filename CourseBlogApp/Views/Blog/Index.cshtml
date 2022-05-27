@@ -1,0 +1,88 @@
+﻿@using CourseBlogApp.ViewModels
+@model BlogViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Last 5 posts</h1>
+
+<table class="table">
+    <tbody>
+        @foreach (var item in Model.Posts)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PostBody)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PublishTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfLike)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfDislikes)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h1>Top ranked posts</h1>
+
+<table class="table">
+    <tbody>
+        @foreach (var item in Model.TopPosts)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PostBody)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PublishTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfLike)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfDislikes)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h1>Last commented posts</h1>
+
+<table class="table">
+    <tbody>
+        @foreach (var item in Model.LastCommentedPosts)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PostBody)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PublishTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfLike)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfDislikes)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

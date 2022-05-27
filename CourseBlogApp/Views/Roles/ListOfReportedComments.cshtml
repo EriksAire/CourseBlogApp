@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Comment>
+
+<h2>Users</h2>
+<table class="table">
+    @foreach (var comment in Model)
+    {
+    <tr>
+        <td>@comment.CommentBody.</td>
+        <td>@comment.Name</td>
+        <td>
+            <a class="btn btn-sm btn-primary" asp-action="ApproveReportedComment" asp-route-commentid="@comment.ID">Approve</a>
+        </td>
+        <td>
+            <a class="btn btn-sm btn-primary" asp-action="DeleteReportedComment" asp-route-commentid="@comment.ID">Delete</a>
+        </td>
+    </tr>
+    }
+</table>
