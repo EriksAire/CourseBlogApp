@@ -1,4 +1,4 @@
-﻿using CourseBlogApp.Models;
+﻿using Domain.Models;
 using System.Collections.Generic;
 
 namespace CourseBlogApp.ViewModels

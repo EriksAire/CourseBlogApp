@@ -1,7 +1,6 @@
-﻿using CourseBlogApp.Interfaces;
-using CourseBlogApp.Models;
-using CourseBlogApp.Services;
+﻿using Application.Interfaces;
 using CourseBlogApp.ViewModels;
+using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,14 +9,14 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace CourseBlogApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class HomeController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly PostService _postService;
+        private readonly IPostService _postService;
 
-        public HomeController(IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager, PostService postService)
+        public HomeController(IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager, IPostService postService)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;
@@ -53,8 +52,13 @@ namespace CourseBlogApp.Controllers
         }
 
 
-        //[Authorize(Roles = "Admin")]
-        [HttpPost("[action]")]
+        //public IActionResult CreatePost()
+        //{
+        //    return View("Create");
+        //}
+
+        [Route("CreatePost")]
+        [HttpPost]
         public async Task CreatePost([FromBody] Post post)
         {
              await _postService.AddPost(post);
@@ -62,7 +66,7 @@ namespace CourseBlogApp.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("[action]/{id}")]
-        public async Task EditPost(string id, [FromBody] Post post)
+        public async Task EditPost(int id, [FromBody] Post post)
         {
             if (id != post.ID)
             {
@@ -73,13 +77,13 @@ namespace CourseBlogApp.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("[action]/{id}")]
-        public async Task Delete(string id)
+        public async Task Delete(int id)
         {
             await _postService.DeletePost(id);
         }
 
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> ButtonClick(string id, bool like)
+        public async Task<IActionResult> ButtonClick(int id, bool like)
         {
             var post = await _unitOfWork.Repo<Post>().GetByIdAsync(id);
             if (like)
@@ -98,7 +102,7 @@ namespace CourseBlogApp.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public async Task CreateComment(string commentbody, string postid)
+        public async Task CreateComment(string commentbody, int postid)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
 
@@ -112,7 +116,7 @@ namespace CourseBlogApp.Controllers
             await _unitOfWork.Repo<Comment>().SaveChangesAsync();
         }
 
-        public async Task<IActionResult> ReportComment(string commentid)
+        public async Task<IActionResult> ReportComment(int commentid)
         {
             var comment = await _unitOfWork.Repo<Comment>().GetByIdAsync(commentid);
             comment.isReported = true;

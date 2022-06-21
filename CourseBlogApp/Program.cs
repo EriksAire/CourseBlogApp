@@ -1,29 +1,20 @@
-using CourseBlogApp.Data;
-using CourseBlogApp.Interfaces;
-using CourseBlogApp.Models;
-using CourseBlogApp.Repository;
-using CourseBlogApp.Services;
+using Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddInfrastructureServices(builder.Configuration);
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<IRepository<Post>, Repository<Post>>();
-builder.Services.AddScoped<IRepository<Comment>, Repository<Comment>>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IRepository<Post>, Repository<Post>>();
-builder.Services.AddScoped<PostService>();
+builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
+{
+    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
 
 var app = builder.Build();
 
@@ -45,6 +36,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseCors(cors=>cors.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader());
 
 app.UseAuthentication();
 app.UseAuthorization();

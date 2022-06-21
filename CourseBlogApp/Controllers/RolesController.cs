@@ -1,6 +1,6 @@
-﻿using CourseBlogApp.Interfaces;
-using CourseBlogApp.Models;
+﻿using Application.Interfaces;
 using CourseBlogApp.ViewModels;
+using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -96,7 +96,7 @@ namespace CourseBlogApp.Controllers
         public IActionResult ListOfReportedComments() =>
             View(_unitOfWork.Repo<Comment>().Find(x => x.isReported == true));
 
-        public async Task<IActionResult> ApproveReportedComment(string commentid)
+        public async Task<IActionResult> ApproveReportedComment(int commentid)
         {
             var comment = await _unitOfWork.Repo<Comment>().GetByIdAsync(commentid);
             comment.isReported = false;
@@ -106,7 +106,7 @@ namespace CourseBlogApp.Controllers
             return RedirectToAction("ListOfReportedComments");
         }
 
-        public async Task<IActionResult> DeleteReportedComment(string commentid)
+        public async Task<IActionResult> DeleteReportedComment(int commentid)
         {
             var comment = await _unitOfWork.Repo<Comment>().GetByIdAsync(commentid);
             _unitOfWork.Repo<Comment>().Delete(comment);

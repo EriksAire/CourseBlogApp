@@ -1,6 +1,6 @@
-﻿using CourseBlogApp.Interfaces;
-using CourseBlogApp.Models;
+﻿using Application.Interfaces;
 using CourseBlogApp.ViewModels;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CourseBlogApp.Controllers
@@ -26,15 +26,7 @@ namespace CourseBlogApp.Controllers
             var searchstrings = viewmodel.Comments.OrderByDescending(c => c.CommentDate).Select(s => s.PostID).Distinct().Take(3).ToArray();
             var topList = new List<Post>();
 
-            for (int i = 0; i < searchstrings.Length; i++)
-            {
-                var post = await _unitOfWork.Repo<Post>().GetByIdAsync(searchstrings[i]);
-
-                if (post != null)
-                {
-                    topList.Add(post);
-                }
-            }
+           
             viewmodel.LastCommentedPosts = topList;
             return View("Index", viewmodel);
         }
