@@ -13,7 +13,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 {
-    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+    builder.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
 }));
 
 var app = builder.Build();
@@ -36,18 +36,27 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseCors(cors=>cors.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader());
+app.UseCors(cors=>cors.AllowAnyMethod().WithOrigins("http://localhost:3000").AllowAnyHeader().AllowCredentials());
 
-app.UseAuthentication();
 app.UseAuthorization();
+app.UseAuthentication();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
-        name:"default",
-        pattern: "{controller=Blog}/{action=Index}/{id?}");
-        endpoints.MapRazorPages();
+//TODO: Get rid of Identity server
+//app.UseIdentityServer();
 
-});
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller}/action=Index/{id?}");
+
+app.MapFallbackToFile("index.html");
+
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapControllerRoute(
+//        name:"default",
+//        pattern: "{controller=Blog}/{action=Index}/{id?}");
+//        endpoints.MapRazorPages();
+
+//});
 
 app.Run();
