@@ -29,7 +29,11 @@ namespace Infrastructure.Services
         {
             var tmpPost = await _unitOfWork.Repo<Post>().GetByIdAsync(id);
 
-            _unitOfWork.Repo<Post>().SetValues(tmpPost, post);
+            if (tmpPost != null)
+            {
+                _unitOfWork.Repo<Post>().SetValues(tmpPost, post);
+            }
+
             await _unitOfWork.Repo<Post>().SaveChangesAsync();
         }
 
@@ -37,7 +41,11 @@ namespace Infrastructure.Services
         {
             var post = await _unitOfWork.Repo<Post>().GetByIdAsync(id);
 
-            _unitOfWork.Repo<Post>().Delete(post);
+            if(post != null)
+            {
+                _unitOfWork.Repo<Post>().Delete(post);
+            }
+
             await _unitOfWork.Repo<Post>().SaveChangesAsync();
         }
     }

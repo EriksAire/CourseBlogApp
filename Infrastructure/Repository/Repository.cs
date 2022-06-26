@@ -30,7 +30,7 @@ namespace Infrastructure.Repository
             context.Set<T>().Remove(item);
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T?> GetByIdAsync(int id)
         {
             return await context.Set<T>().FindAsync(id);
         }

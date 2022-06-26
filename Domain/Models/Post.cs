@@ -7,15 +7,13 @@ namespace Domain.Models
         public int ID { get; set; }
 
         [Required]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
-        public string PostBody { get; set; }
+        public string? PostBody { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime PublishTime { get; set; } = DateTime.Now;
 
-        public int NumberOfLike { get; set; }
-
-        public int NumberOfDislikes { get; set; }
+        public int Rating { get; set; }
     }
 }

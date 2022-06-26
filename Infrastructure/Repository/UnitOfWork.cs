@@ -11,7 +11,7 @@ namespace Infrastructure.Repository
     internal class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext context;
-        private Hashtable _repositories;
+        private Hashtable? _repositories;
 
         public UnitOfWork(ApplicationDbContext context)
         {
