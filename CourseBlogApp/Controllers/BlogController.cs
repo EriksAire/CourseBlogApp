@@ -22,7 +22,7 @@ namespace CourseBlogApp.Controllers
             viewmodel.Comments = await _unitOfWork.Repo<Comment>().GetAllAsync();
 
             viewmodel.Posts = viewmodel.Posts.OrderBy(c => c.PublishTime).Take(5);
-            viewmodel.TopPosts = viewmodel.Posts.OrderByDescending(s => s.NumberOfLike).Take(3);
+            viewmodel.TopPosts = viewmodel.Posts.OrderByDescending(s => s.Rating).Take(3);
             var searchstrings = viewmodel.Comments.OrderByDescending(c => c.CommentDate).Select(s => s.PostID).Distinct().Take(3).ToArray();
             var topList = new List<Post>();
 
