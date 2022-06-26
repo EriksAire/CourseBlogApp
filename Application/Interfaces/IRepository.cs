@@ -10,7 +10,7 @@ namespace Application.Interfaces
     {
         Task<IEnumerable<T>> GetAllAsync();
 
-        Task<T> GetByIdAsync(int id);
+        Task<T?> GetByIdAsync(int id);
 
         public IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
 
