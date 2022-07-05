@@ -48,5 +48,17 @@ namespace Infrastructure.Services
 
             await _unitOfWork.Repo<Post>().SaveChangesAsync();
         }
+
+        public async Task<Post> GetPost(int id)
+        {
+            var post = await _unitOfWork.Repo<Post>().GetByIdAsync(id);
+
+            if (post != null)
+            {
+                return post;
+            }
+
+            throw new NullReferenceException("No post found");
+        }
     }
 }

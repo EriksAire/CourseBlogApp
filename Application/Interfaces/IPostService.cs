@@ -8,5 +8,6 @@ namespace Application.Interfaces
         Task DeletePost(int id);
         Task EditPost(int id, Post post);
         Task<IEnumerable<Post>> GetAllPosts();
+        Task<Post> GetPost(int id);
     }
 }
