@@ -9,7 +9,8 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddControllersWithViews();
+//builder.Services.AddControllersWithViews();
+builder.Services.AddControllers();
 
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 {
@@ -33,22 +34,21 @@ else
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+//app.UseStaticFiles();
 
 app.UseRouting();
 app.UseCors(cors=>cors.AllowAnyMethod().WithOrigins("http://localhost:3000").AllowAnyHeader().AllowCredentials());
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
-//TODO: Get rid of Identity server
-//app.UseIdentityServer();
 
+app.MapControllers();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/action=Index/{id?}");
 
-app.MapFallbackToFile("index.html");
+//app.MapFallbackToFile("index.html");
 
 //app.UseEndpoints(endpoints =>
 //{

@@ -1,0 +1,33 @@
+version: '3.4'
+
+services:
+  blogappapi:
+    image: ${DOCKER_REGISTRY-}blogappapi
+    build:
+      context: .
+      dockerfile: CourseBlogApp/Dockerfile
+    networks:
+      - blog-network
+    ports:
+      - '8090:80'
+    depends_on:
+      - 'postgres'
+
+  postgres:
+    ports:
+      - "5432"
+    container_name: blog-postgresql
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+       - ${APPDATA}:/var/lib/postgresql/data'
+    image: postgres:latest
+    networks:
+      - blog-network
+
+networks:
+  blog-network:
+    driver: bridge
+   
+      
+    

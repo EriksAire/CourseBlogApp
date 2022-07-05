@@ -13,6 +13,7 @@ namespace Infrastructure.Data
             : base(options)
         {
         }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -36,14 +37,12 @@ namespace Infrastructure.Data
         public DbSet<Post> ?Posts { get; set; }
         public DbSet<Comment> ?Comments { get; set; }
 
-        
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             
             //TODO: Swap builders on dev 
-            optionsBuilder.UseNpgsql("Username=postgres;Password=password;Server=postgres;Port=5432;Database=BlogApp;Integrated Security=true;Pooling=true");
-            //optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=BlogApp;Username=postgres;Password=password");
+            //optionsBuilder.UseNpgsql("Username=postgres;Password=password;Server=postgres;Port=5432;Database=BlogApp;Integrated Security=true;Pooling=true");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=BlogApp;Username=postgres;Password=password");
         }
     }
 }

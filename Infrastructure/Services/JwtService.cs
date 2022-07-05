@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,17 @@ namespace Infrastructure.Services
 {
     internal class JwtService : IJwtService
     {
-        const string KEY = "this is a very secure key#";  
-        
+        private readonly IConfiguration config;
+
+        public JwtService(IConfiguration config)
+        {
+            this.config = config;
+        }
+
         public string Generate(int id)
         {
-            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
+            var key = Encoding.ASCII.GetBytes(config.GetSection("JwtConfig:Secret").Value);
+            var symmetricSecurityKey = new SymmetricSecurityKey(key);
             var credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
             var header = new JwtHeader(credentials);
 
@@ -28,7 +35,8 @@ namespace Infrastructure.Services
         public JwtSecurityToken Verify(string jwt)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(KEY);
+            var key = Encoding.ASCII.GetBytes(config.GetSection("JwtConfig:Secret").Value);
+
             tokenHandler.ValidateToken(jwt, new TokenValidationParameters
             {
                 IssuerSigningKey = new SymmetricSecurityKey(key),
@@ -36,6 +44,7 @@ namespace Infrastructure.Services
                 ValidateIssuer = false,
                 ValidateAudience = false
             }, out SecurityToken validatedToken);
+
 
             return (JwtSecurityToken)validatedToken;
         }

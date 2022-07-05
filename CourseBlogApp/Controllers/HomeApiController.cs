@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Domain.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -22,20 +23,38 @@ namespace BlogAppAPI.Controllers
 
         public async Task<IActionResult> GetPosts()
         {
-            if(await postService.GetAllPosts()!= null)
+            var postslist = await postService.GetAllPosts();
+
+            if (postslist != null)
             {
-                var postslist = await postService.GetAllPosts();
                 return Ok(postslist);
             }
+
             return NoContent();
         }
 
+        [Authorize]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPosts(int id)
+        {
+            var post = await postService.GetPost(id);
+
+            if(post != null)
+            {
+                return Ok(post);
+            }
+
+            return NoContent();
+        }
+
+        [Authorize]
         [HttpPost("[action]")]
         public async Task CreatePost([FromBody] Post post)
         {
             await postService.AddPost(post);
         }
 
+        [Authorize]
         [HttpPut("[action]/{id}")]
         public async Task<ActionResult> EditPost(int id, [FromBody] Post post)
         {

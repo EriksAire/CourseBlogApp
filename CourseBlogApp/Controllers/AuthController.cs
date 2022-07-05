@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using BlogAppAPI.DTO;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ namespace BlogAppAPI.Controllers
     [EnableCors]
     [ApiController]
     [Route("api")]
-    public class AuthController : Controller
+    public class AuthController : Controller    //TODO: Extract logic from controllers to services
     {
         private readonly IUnitOfWork _repository;
         private readonly IJwtService _jwtService;
@@ -35,6 +36,8 @@ namespace BlogAppAPI.Controllers
             return Created("success", user);
         }
 
+
+        //TODO: CHECK WHY RESPONSE.COOKIE.APPEND doesnt work on Chrome!!!!!!!
         [HttpPost("login")]
         public IActionResult Login(LoginDto dto)
         {
@@ -51,9 +54,13 @@ namespace BlogAppAPI.Controllers
 
             Response.Cookies.Append("jwt", jwt, new CookieOptions
             {
-                HttpOnly = true
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.Now.AddMinutes(15),
+                IsEssential = true,
+                //HttpOnly = true,
+                Secure = true
             });
-
+           
             return Ok(new
             {
                 message = "success"
@@ -61,7 +68,7 @@ namespace BlogAppAPI.Controllers
         }
 
         [HttpGet("user")]
-        public IActionResult User()
+        public async Task<IActionResult> User()
         {
             try
             {
@@ -71,7 +78,7 @@ namespace BlogAppAPI.Controllers
 
                 int userId = int.Parse(token.Issuer);
 
-                var user = _repository.Repo<User>().GetByIdAsync(userId);
+                var user = await _repository.Repo<User>().GetByIdAsync(userId);
 
                 return Ok(user);
             }
@@ -81,10 +88,17 @@ namespace BlogAppAPI.Controllers
             }
         }
 
+        //[Authorize]
         [HttpPost("logout")]
         public IActionResult Logout()
         {
-            Response.Cookies.Delete("jwt");
+            Response.Cookies.Delete("jwt", new CookieOptions
+            {
+                SameSite = SameSiteMode.None,
+                IsEssential = true,
+                //HttpOnly = true,
+                Secure = true
+            });
 
             return Ok(new
             {
