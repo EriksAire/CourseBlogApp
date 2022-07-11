@@ -8,17 +8,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BlogAppAPI.Controllers
 {
-    //[Authorize]
     [EnableCors]
     [Route("api/[controller]")]
     [ApiController]
     public class HomeApiController : ControllerBase
     {
         private readonly IPostService postService;
+        private readonly ICommentService commentService;
 
-        public HomeApiController(IPostService postService)
+        public HomeApiController(IPostService postService, ICommentService commentService)
         {
             this.postService = postService;
+            this.commentService = commentService;
         }
 
         public async Task<IActionResult> GetPosts()
@@ -64,6 +65,64 @@ namespace BlogAppAPI.Controllers
             }
             await postService.EditPost(id, post);
             return Ok();
+        }
+
+        public async Task DeletePost(int id)
+        {
+            await postService.DeletePost(id);
+        }
+
+
+        [Authorize]
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetComments()
+        {
+            var commentsList = await postService.GetAllPosts();
+
+            if (commentsList != null)
+            {
+                return Ok(commentsList);
+            }
+
+            return NoContent();
+        }
+
+        [Authorize]
+        [HttpGet("[action]/{id}")]
+        public async Task<ActionResult> GetComments(int id)
+        {
+            var comment = await commentService.GetComment(id);
+
+            if (comment != null)
+            {
+                return Ok(comment);
+            }
+
+            return NoContent();
+        }
+
+        [Authorize]
+        [HttpPost("[action]")]
+        public async Task AddComment([FromBody] Comment comment)
+        {
+            await commentService.AddComment(comment);
+        }
+
+        [Authorize]
+        [HttpPut("[action]/{id}")]
+        public async Task<ActionResult> EditComment(int id, [FromBody] Comment comment)
+        {
+            if (id != comment.ID)
+            {
+                return BadRequest();
+            }
+            await commentService.EditComment(id, comment);
+            return Ok();
+        }
+
+        public async Task DeleteComment(int id)
+        {
+            await commentService.DeleteComment(id);
         }
     }
 }

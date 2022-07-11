@@ -88,7 +88,7 @@ namespace BlogAppAPI.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost("logout")]
         public IActionResult Logout()
         {

@@ -73,8 +73,8 @@ namespace Infrastructure
             services.AddScoped<IRepository<Post>, Repository<Post>>();
             services.AddScoped<IRepository<Comment>, Repository<Comment>>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IRepository<Post>, Repository<Post>>();
             services.AddScoped<IPostService,PostService>();
+            services.AddScoped<ICommentService, CommentService>();
 
             return services;
         }
