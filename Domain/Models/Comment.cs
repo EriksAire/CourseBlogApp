@@ -1,4 +1,6 @@
-﻿namespace Domain.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Domain.Models
 {
     public class Comment
     {
@@ -6,6 +8,7 @@
 
         public string? Name { get; set; }
 
+        [Required]
         public string? CommentBody { get; set; }
 
         public int PostID { get; set; }

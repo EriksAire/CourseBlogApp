@@ -22,6 +22,7 @@ namespace BlogAppAPI.Controllers
             this.commentService = commentService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> GetPosts()
         {
             var postslist = await postService.GetAllPosts();

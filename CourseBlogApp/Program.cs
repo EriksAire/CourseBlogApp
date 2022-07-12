@@ -48,15 +48,4 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/action=Index/{id?}");
 
-//app.MapFallbackToFile("index.html");
-
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapControllerRoute(
-//        name:"default",
-//        pattern: "{controller=Blog}/{action=Index}/{id?}");
-//        endpoints.MapRazorPages();
-
-//});
-
 app.Run();

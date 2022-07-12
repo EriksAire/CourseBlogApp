@@ -7,8 +7,11 @@ namespace Domain.Models
         public int ID { get; set; }
 
         [Required]
+        [StringLength(100)]
         public string? Title { get; set; }
 
+        [Required]
+        [StringLength(500, ErrorMessage ="Text length cannot be bigger than 500 characters")]
         public string? PostBody { get; set; }
 
         [DataType(DataType.Date)]
