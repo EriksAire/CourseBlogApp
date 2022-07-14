@@ -17,6 +17,13 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
     builder.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
 }));
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(7222, configure => configure.UseHttps());
+    options.ListenAnyIP(5222);
+
+});
+
 var app = builder.Build();
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -33,11 +40,11 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 //app.UseStaticFiles();
 
 app.UseRouting();
-app.UseCors(cors=>cors.AllowAnyMethod().WithOrigins("http://localhost:3000").AllowAnyHeader().AllowCredentials());
+app.UseCors(cors => cors.AllowAnyMethod().WithOrigins("http://localhost:3000").AllowAnyHeader().AllowCredentials());
 
 app.UseAuthentication();
 app.UseAuthorization();

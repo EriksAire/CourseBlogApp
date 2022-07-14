@@ -57,7 +57,7 @@ namespace BlogAppAPI.Controllers
                 SameSite = SameSiteMode.None,
                 Expires = DateTime.Now.AddMinutes(15),
                 IsEssential = true,
-                //HttpOnly = true,
+                HttpOnly = true,
                 Secure = true
             });
            
@@ -96,7 +96,7 @@ namespace BlogAppAPI.Controllers
             {
                 SameSite = SameSiteMode.None,
                 IsEssential = true,
-                //HttpOnly = true,
+                HttpOnly = true,
                 Secure = true
             });
 
